@@ -46,7 +46,7 @@ def submit():
         return render_template("success.html")
 
     except Exception as e:
-        return render_template("form.html", error="Error saving data. Please try again.")
+        return render_template("form.html", error=str(e))
 
 
 if __name__ == "__main__":
