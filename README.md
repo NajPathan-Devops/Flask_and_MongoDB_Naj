@@ -1,434 +1,252 @@
-.
 
-# AWS_Naj — AWS Cloud Deployment Project
+# Flask + MongoDB Student Registration Application
+
+A Python Flask web application integrated with MongoDB Atlas for storing student registration data. The project includes a web-based registration form, REST API endpoints, MongoDB database operations, and environment-based configuration for secure database credentials.
 
 ## 🚀 Project Overview
 
-A full-stack web application built with **Python Flask** and **Node.js/Express.js**, containerized with Docker and deployed using multiple AWS services and deployment approaches.
+This project was built to practice backend development using:
 
-This project demonstrates practical experience with:
+* Python
+* Flask
+* MongoDB Atlas
+* PyMongo
+* REST APIs
+* HTML/CSS
+* Environment variables
 
-**Docker → Amazon ECR → Amazon ECS/Fargate → AWS VPC & Security Groups**
-
-It also includes EC2-based deployment and cloud networking configuration.
-
----
+The application allows users to submit student information through a web form and stores the submitted data in MongoDB.
 
 ## 🏗️ Architecture
 
 ```text
-                    AWS Cloud
-                       │
-          ┌────────────┴────────────┐
-          │                         │
-       Amazon EC2              Amazon ECS
-          │                     / Fargate
-          │                         │
-       Docker                  Docker Images
-          │                         │
-          │                    Amazon ECR
-          │                         │
-          └────────────┬────────────┘
-                       │
-                  VPC / Network
-                       │
-                Security Groups
-                       │
-              Full-Stack Application
-                ┌──────────────┐
-                │   Frontend   │
-                │ Express.js   │
-                │    :3000     │
-                └──────┬───────┘
-                       │
-                ┌──────▼───────┐
-                │   Backend    │
-                │    Flask     │
-                │    :5000     │
-                └──────────────┘
+User
+ │
+ ▼
+HTML Registration Form
+ │
+ ▼
+Flask Application
+ │
+ ├── REST API
+ │
+ ├── Student Registration
+ │
+ └── To-Do API
+ │
+ ▼
+PyMongo
+ │
+ ▼
+MongoDB Atlas
+ └── flask_assignment
+      └── students
 ```
 
----
+## 🛠️ Tech Stack
 
-## ☁️ AWS Services Used
-
-| AWS Service         | Purpose                        |
-| ------------------- | ------------------------------ |
-| **Amazon EC2**      | Virtual server deployment      |
-| **Amazon ECR**      | Docker image storage           |
-| **Amazon ECS**      | Container orchestration        |
-| **AWS Fargate**     | Serverless container execution |
-| **Amazon VPC**      | Network isolation              |
-| **Security Groups** | Network traffic control        |
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-
-* Node.js
-* Express.js
-* HTML
-* CSS
-* JavaScript
-
-### Backend
-
-* Python
-* Flask
-
-### DevOps / Cloud
-
-* Docker
-* Docker Compose
-* Amazon EC2
-* Amazon ECR
-* Amazon ECS
-* AWS Fargate
-* Amazon VPC
-* Security Groups
-* Linux
-* Git & GitHub
-
----
+| Technology    | Purpose                   |
+| ------------- | ------------------------- |
+| Python        | Backend programming       |
+| Flask         | Web framework             |
+| MongoDB Atlas | Cloud database            |
+| PyMongo       | MongoDB integration       |
+| HTML/CSS      | Frontend                  |
+| python-dotenv | Environment configuration |
+| REST API      | Backend API communication |
 
 ## 📁 Project Structure
 
 ```text
-AWS_Naj/
+Flask_and_MongoDB_Naj/
 │
-├── backend/
-│   ├── app.py
-│   ├── requirements.txt
-│   └── Dockerfile
+├── templates/
+│   ├── form.html
+│   └── success.html
 │
-├── frontend/
-│   ├── server.js
-│   ├── package.json
-│   ├── package-lock.json
-│   └── Dockerfile
-│
-├── screenshots/
-│   ├── ...
-│
-├── docker-compose.yml
+├── app.py
+├── backend_data.json
+├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
 
----
+## ⚙️ Application Features
 
-# 🐳 Docker Deployment
+### 1. Student Registration
 
-The application was first containerized using Docker.
+The application provides a registration form where users can submit student information.
 
-Two separate Docker images were created:
+Submitted data is stored in the MongoDB `students` collection.
 
-```text
-Backend → Flask
-Frontend → Node.js / Express
-```
+### 2. MongoDB Atlas Integration
 
-### Backend Docker Image
+The Flask application connects to MongoDB Atlas using PyMongo.
 
-```text
-najpathan/docker-backend:latest
-```
-
-### Frontend Docker Image
+Database:
 
 ```text
-najpathan/docker-frontend:latest
+flask_assignment
 ```
 
----
-
-## ▶️ Run with Docker Compose
-
-Start the complete application:
-
-```bash
-docker compose up --build
-```
-
-The services run on:
+Collection:
 
 ```text
-Frontend → Port 3000
-Backend  → Port 5000
+students
 ```
 
-Stop the application:
+The MongoDB connection string is loaded from an environment variable rather than being stored directly in the source code.
 
-```bash
-docker compose down
-```
+### 3. REST API
 
----
-
-# 💻 Amazon EC2 Deployment
-
-The application was also deployed using **Amazon EC2**.
-
-Two deployment approaches were tested:
-
-### 1. Single EC2 Deployment
-
-Frontend and backend containers were deployed on an EC2 instance.
-
-```text
-EC2
- ├── Frontend Container → :3000
- └── Backend Container  → :5000
-```
-
-### 2. Separate EC2 Deployment
-
-Frontend and backend were deployed separately using EC2 instances.
-
-```text
-EC2 Instance 1
- └── Frontend → :3000
-
-EC2 Instance 2
- └── Backend → :5000
-```
-
-Temporary public IPs were used during testing and are no longer active.
-
----
-
-# 📦 Amazon ECR
-
-Docker images were pushed to **Amazon Elastic Container Registry (ECR)**.
-
-Repositories created for the project:
-
-```text
-aws-naj-backend
-aws-naj-frontend
-```
-
-Typical workflow:
-
-```text
-Build Docker Image
-        ↓
-Tag Image
-        ↓
-Authenticate with Amazon ECR
-        ↓
-Push Image to ECR
-        ↓
-Use Image in ECS
-```
+The project includes API endpoints for interacting with the backend.
 
 Example:
 
+```text
+GET /
+GET /api
+POST /submit
+```
+
+### 4. To-Do API
+
+The project also contains a small To-Do functionality demonstrating another MongoDB operation.
+
+## 🔐 Environment Configuration
+
+Create a `.env` file in the project root:
+
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+```
+
+The `.env` file is intentionally excluded from Git using `.gitignore`.
+
+**Never commit your MongoDB username, password, or connection string to GitHub.**
+
+## 💻 Local Setup
+
+### 1. Clone the repository
+
 ```bash
-docker build -t aws-naj-backend ./backend
-docker build -t aws-naj-frontend ./frontend
+git clone git@github.com:NajPathan-Devops/Flask_and_MongoDB_Naj.git
+cd Flask_and_MongoDB_Naj
 ```
 
-After tagging the images with the ECR repository URI, they were pushed to Amazon ECR.
+### 2. Create a virtual environment
 
----
+```bash
+python3 -m venv venv
+```
 
-# 🚀 Amazon ECS / Fargate Deployment
+### 3. Activate the virtual environment
 
-The Docker images stored in Amazon ECR were used for container deployment with **Amazon ECS**.
+Linux / WSL:
 
-### ECS Configuration
+```bash
+source venv/bin/activate
+```
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Configure MongoDB
+
+Create `.env` and add your MongoDB Atlas connection string:
+
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+```
+
+### 6. Run the application
+
+```bash
+python app.py
+```
+
+The application runs locally on:
 
 ```text
-Cluster:
-AWS-Naj-ECS-Cluster
-
-Service:
-AWS-Naj-Service
-
-Launch Type:
-Fargate
-
-Platform:
-Linux / x86_64
+http://127.0.0.1:5000
 ```
 
-The ECS task was configured to run the frontend and backend containers.
+## 🧪 Testing
+
+After starting the Flask server, verify the application in a browser:
 
 ```text
-ECS Task
-│
-├── Frontend Container
-│   └── Port 3000
-│
-└── Backend Container
-    └── Port 5000
+http://127.0.0.1:5000/
 ```
 
-For the ECS deployment, the frontend communicates with the backend using the configured container networking.
-
----
-
-# 🌐 VPC & Security Groups
-
-The application was deployed within an AWS VPC environment.
-
-Security groups were configured to control inbound traffic.
-
-Example application port:
+Test the API endpoint:
 
 ```text
-TCP 3000 → Frontend
+http://127.0.0.1:5000/api
 ```
 
-Additional backend/network rules were configured as required for communication between the application components.
+Submit a student through the registration form and verify that the data is stored in the MongoDB Atlas `students` collection.
 
-> Public access rules were used temporarily for testing and should be restricted in a production environment.
-
----
-
-# 🧪 Application Testing
-
-The application was tested after deployment to verify:
-
-* Frontend accessibility
-* Backend availability
-* Container communication
-* Docker image functionality
-* EC2 deployment
-* ECR image availability
-* ECS task execution
-* Network configuration
-* Security group rules
-
----
-
-# 📸 Screenshots
-
-The `screenshots/` directory contains project evidence, including:
-
-* Docker builds
-* Docker containers
-* Docker Compose
-* EC2 deployment
-* ECR repositories
-* Docker image push
-* ECS configuration
-* Fargate deployment
-* VPC configuration
-* Security groups
-* Application testing
-
-These screenshots provide evidence of the AWS deployment process.
-
----
-
-# 🧹 AWS Resource Cleanup
-
-Temporary AWS resources created during testing were cleaned up after completing the deployment experiments.
-
-This included temporary compute, container, and networking resources where applicable.
-
-> Temporary public IPs were used during testing and are no longer active.
-
----
-
-# 📊 Project Results
-
-Successfully demonstrated a complete cloud deployment workflow:
+## 🔄 Application Flow
 
 ```text
-Application
-     ↓
-Docker
-     ↓
-Docker Images
-     ↓
-Amazon ECR
-     ↓
-Amazon ECS / Fargate
-     ↓
-AWS VPC
-     ↓
-Security Groups
-     ↓
-Running Application
+1. User opens the Flask application
+              ↓
+2. User fills the student registration form
+              ↓
+3. Flask receives POST /submit
+              ↓
+4. PyMongo connects to MongoDB Atlas
+              ↓
+5. Student data is inserted
+              ↓
+6. Success page is displayed
 ```
 
-The project provided hands-on experience with containerization, cloud infrastructure, networking, and AWS deployment.
+## 🔒 Security Practices
 
----
+* MongoDB credentials are stored using environment variables.
+* `.env` is excluded using `.gitignore`.
+* Python virtual environment is excluded from Git.
+* Sensitive database credentials should never be committed to the repository.
 
-# 🎯 Skills Demonstrated
+## 📚 What I Learned
 
-* AWS Cloud
-* Amazon EC2
-* Amazon ECR
-* Amazon ECS
-* AWS Fargate
-* AWS VPC
-* Security Groups
-* Docker
-* Docker Compose
-* Linux
-* Node.js
-* Express.js
-* Python
-* Flask
-* Containerized application deployment
-* Cloud networking
-* Git & GitHub
-* Troubleshooting and deployment testing
+Through this project, I practiced:
 
----
+* Building a Flask web application
+* Creating Flask routes
+* Handling GET and POST requests
+* Connecting Python applications to MongoDB Atlas
+* Performing MongoDB insert operations with PyMongo
+* Creating REST API endpoints
+* Using environment variables for configuration
+* Managing Python virtual environments
+* Protecting sensitive configuration files with `.gitignore`
+* Structuring a small backend application for GitHub
 
-# 📚 Key Learning
+## 🎯 Project Outcome
 
-Through this project, I gained practical experience in:
+A working Flask backend was developed with MongoDB Atlas integration and a browser-based student registration interface.
 
-* Creating and managing AWS EC2 instances
-* Deploying applications on cloud infrastructure
-* Creating Docker images
-* Running multi-container applications with Docker Compose
-* Publishing Docker images to Amazon ECR
-* Deploying containers using Amazon ECS/Fargate
-* Configuring VPC networking
-* Managing AWS Security Groups
-* Connecting frontend and backend containers
-* Testing and troubleshooting cloud deployments
-* Cleaning up temporary AWS resources
+The project demonstrates practical experience with **Python backend development, Flask, MongoDB, REST APIs, and secure environment-based configuration**.
 
----
-
-# 🔗 Project
-
-**GitHub Repository:** `NajPathan-Devops/AWS_Naj`
-
-**Docker Images:**
-
-* `najpathan/docker-backend:latest`
-* `najpathan/docker-frontend:latest`
-
----
-
-# 👩‍💻 Author
+## 👩‍💻 Author
 
 **Naj Pathan**
 
-Aspiring Cloud / DevOps Engineer
-
-Skills: AWS • Docker • Kubernetes • Terraform • Jenkins • Linux • CI/CD
+GitHub: `NajPathan-Devops`
 
 ---
 
-## ⭐ Project Summary
-
-**AWS_Naj** demonstrates a complete practical cloud deployment workflow using **Docker, Amazon EC2, Amazon ECR, Amazon ECS/Fargate, VPC, and Security Groups**.
-
-The project showcases hands-on experience in deploying and managing a containerized full-stack application on AWS.
-
-.
-
+⭐ This project was created as part of my backend and DevOps learning journey.
 
